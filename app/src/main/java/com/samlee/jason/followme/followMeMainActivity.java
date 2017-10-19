@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -38,6 +40,17 @@ public class followMeMainActivity extends AppCompatActivity {
 
         mBaiduMap = mMapView.getMap();
 
+        LocationClient myLocation;
+
+        myLocation = new LocationClient(this);
+        LocationClientOption option = new LocationClientOption();
+        option.setOpenGps(true);
+        option.setCoorType("bd90ll");
+        option.setScanSpan(1000);
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+        myLocation.setLocOption(option);
+        myLocation.start();
+
 //        private MKOfflineMap mOffline
 //        mOffline = new MKOfflineMap();
 //// 传入接口事件，离线地图更新会触发该回调
@@ -65,24 +78,16 @@ public class followMeMainActivity extends AppCompatActivity {
 
         //定义Maker坐标点
         LatLng pointSZ = new LatLng(22.5431, 114.0579);
-        LatLng pointGZ = new LatLng(23.1291,113.2644);
 //构建Marker图标
         BitmapDescriptor bitmap = BitmapDescriptorFactory.fromResource(R.drawable.smallcar);
 //构建MarkerOption，用于在地图上添加Marker
-        OverlayOptions option = new MarkerOptions().position(pointSZ).icon(bitmap);
+        OverlayOptions optionOverlay = new MarkerOptions().position(pointSZ).icon(bitmap);
 //在地图上添加Marker，并显示
-        mBaiduMap.addOverlay(option);
+        mBaiduMap.addOverlay(optionOverlay);
 
-        OverlayOptions options = new MarkerOptions()
-                .position(pointGZ)  //设置marker的位置
-                .icon(bitmap)  //设置marker图标
-                .zIndex(9)  //设置marker所在层级
-                .draggable(true);  //设置手势拖拽
-//将marker添加到地图上
-        marker = (Marker) (mBaiduMap.addOverlay(options));
         mBaiduMap.setMyLocationEnabled(true);
 
-        MapStatus mMapStatus = new MapStatus.Builder()
+         MapStatus mMapStatus = new MapStatus.Builder()
                 .target(pointSZ)
                 .zoom(15)
                 .build();
@@ -90,6 +95,8 @@ public class followMeMainActivity extends AppCompatActivity {
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
 //改变地图状态
         mBaiduMap.setMapStatus(mMapStatusUpdate);
+
+
 
 
         mBaiduMap.setOnMapClickListener(new BaiduMap.OnMapClickListener() {
@@ -102,6 +109,18 @@ public class followMeMainActivity extends AppCompatActivity {
                 currentLongitude = mBaiduMap.getLocationData().longitude;
                 Toast draft =Toast.makeText(getApplicationContext(), "Location : " + currentLatitude + "|"+ currentLongitude, Toast.LENGTH_SHORT);
                 draft.show();
+
+                LatLng pointCurrent = new LatLng(currentLatitude,currentLongitude);
+
+                MapStatus mMapStatusCurrent = new MapStatus.Builder()
+                        .target(pointCurrent)
+                        .zoom(15)
+                        .build();
+
+                MapStatusUpdate mMapStatusUpdateCurrent = MapStatusUpdateFactory.newMapStatus(mMapStatusCurrent);
+//改变地图状态
+                mBaiduMap.setMapStatus(mMapStatusUpdateCurrent);
+
 
             }
 

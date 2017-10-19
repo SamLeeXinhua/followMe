@@ -18,7 +18,7 @@
         </activity>
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="GUabfI5VON4Gu9w4nRbs7UVRo5jAoYG0"/>
+            android:value="GUabfI5VON4Gu9w4nRbs7UVRo5jAoYGu"/>
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -30,5 +30,7 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.LOCATION_HARDWARE" />
 
 </manifest>
